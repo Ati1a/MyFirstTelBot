@@ -1,6 +1,8 @@
 import telebot
 import fitz
-from config import settings #токен хранится в отдельнов файле в целях безопасности
+import requests
+from bs4 import BeautifulSoup as BS
+from config import settings  # токен хранится в отдельнов файле в целях безопасности
 
 bot = telebot.TeleBot(settings['token'])
 
@@ -12,13 +14,29 @@ commands = {
 }
 
 
+def last_news(link):
+    site = requests.get(link)
+    html = BS(site.content, 'html.parser')
+    post = html.find('div', class_="post")
+    title = post.find('a', {"class": "link link_dark2 no-visited"}).text
+    news = title
+    if news != []:
+        return news
+    else:
+        return "что-то пошло не так"
+
+
 def search_name(snils):
     pdf = fitz.open(settings['file'])
+    flag = True
     for current_page in range(len(pdf)):
         page = pdf.load_page(current_page)
         if page.search_for(snils):
+            flag = False
             message = ('%s найден на %i странице в файле ' % (snils, current_page + 1)) + settings['file_name']
             return message
+    if flag:
+        return 'Я не смог найти вас в приказах о зачисление'
 
 
 bot.delete_my_commands(scope=None, language_code=None)
@@ -28,7 +46,9 @@ bot.set_my_commands(
         telebot.types.BotCommand("/help", "помощь"),
         telebot.types.BotCommand("/info", "информация о боте"),
         telebot.types.BotCommand("/commands", "Вывести список доступных команд"),
-        telebot.types.BotCommand("/search", "Искать себя в списке зачисленных")
+        telebot.types.BotCommand("/search", "Искать себя в списке зачисленных"),
+        telebot.types.BotCommand("/contacts", "Контакты НИУ ВШЭ"),
+        telebot.types.BotCommand("/news", "Последняя новость для поступающих")
     ],
 )
 
@@ -44,7 +64,19 @@ def get_text_messages(message):
         /help - помощь
         /info - информация о боте
         /commands - выводит список доступных команд
-        /search - поиск себя в приказе на зачисление""")
+        /search - поиск себя в приказе на зачисление
+        /contacts - контакты НИУ ВШЭ
+        /news - показывает последнюю новость для поступающих""")
+    elif message.text == "/contacts":
+        bot.send_message(message.from_user.id, """Контакты:
+        Тел.: +7 (495) 771-32-32
+        Факс.: +7 (495) 628-79-31
+        Приёмная комиссия:
+        +7 (495) 771-32-42
+        +7 (495) 916-88-44""")
+    elif message.text == "/news":
+        bot.send_message(message.from_user.id, last_news(settings['link']))
+        bot.send_message(message.from_user.id, settings['link'])
     else:
         bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help или /commands")
 
