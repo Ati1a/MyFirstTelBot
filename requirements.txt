@@ -1,5 +1,5 @@
-fitz - для работы с файлами .pdf
-PyMuPDF - нужен для работы модуля fitz
-telebot - требуется для работы с ботом в Telegram
-requests - нужен для запроса
-beatifulSoup4 - нужен для парсинга
+fitz
+PyMuPDF
+telebot
+requests
+beatifulSoup4
