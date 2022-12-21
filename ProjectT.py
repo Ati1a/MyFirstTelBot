@@ -15,6 +15,13 @@ commands = {
 
 
 def last_news(link):
+    """
+    функция проводит парсинг страницы и достаёт заголовок последнего поста на ней
+
+    :param link: ссылка на страницу
+    :return: возвращает заголовок в формате текста. В случае ошибки, возвращает информацию о том, что новость найти не удалось
+    """
+    
     site = requests.get(link)
     html = BS(site.content, 'html.parser')
     post = html.find('div', class_="post")
@@ -27,6 +34,14 @@ def last_news(link):
 
 
 def search_name(snils):
+    """
+    Функция открывает pdf файл и ищет в нём заданый снилс
+
+    :param snils: искомый снилс
+    :return: если снилс бы найден, возвращает сообщение об этом с указанием страницы и названием файла. Если снилс не
+    был найден в файле, возвращает сообщение о неудаче.
+    """
+    
     pdf = fitz.open(settings['file'])
     flag = True
     for current_page in range(len(pdf)):
@@ -55,6 +70,12 @@ bot.set_my_commands(
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
+    """
+    Функция обрабатывает сообщение пользователя и производит отправку соответствующего сообщения обратно пользователю
+
+    :param message: сообщение полученное от пользователя
+    """
+    
     if message.text in commands:
         bot.send_message(message.from_user.id, commands[message.text])
     elif "Мой снилс: " in message.text:
