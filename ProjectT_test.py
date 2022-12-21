@@ -7,7 +7,7 @@ class TestProjectT(unittest.TestCase):
         self.assertEqual(ProjectT.last_news('https://ba.hse.ru/news/admission/'), 'Опубликована стоимость обучения для поступающих в 2023 году')
         self.assertNotEqual(ProjectT.last_news('https://ba.hse.ru/news/admission/'), 'Опубликованы траектории и схемы поступления в 2023 году')
 
-    def test_search_name(self):
+    def test_search_name(self):  # файл который я использовал для тестов можно найти и скачать с сайта ВШЭ - Приказ 6.18.1-05_160822-59.pdf
         self.assertEqual(ProjectT.search_name('177-037-237 75'), '177-037-237 75 найден на 43 странице в файле Приказ 6.18.1-05_160822-59')
         self.assertNotEqual(ProjectT.search_name('177-037-237 75'), 'Я не смог найти вас в приказах о зачисление')
         self.assertEqual(ProjectT.search_name('000-000-000 00'), 'Я не смог найти вас в приказах о зачисление')
