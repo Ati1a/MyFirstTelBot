@@ -1,7 +1,7 @@
 settings = {
-    'token': '5401062913:AAHPt5TqV0W-SSYMILDjB9_YZUcxn715nfk',
-    'id': '5401062913',
-    'file': 'C:/Users/ipetr/OneDrive/Desktop/Project/Приказ 6.18.1-05_160822-59.pdf',
-    'file_name': 'Приказ 6.18.1-05_160822-59',
+    'token': 'ваш токен',
+    'id': 'ID вашего бота',
+    'file': 'полный путь к файлу приказа, включая сам файл',
+    'file_name': 'название файла приказа без .pdf',
     'link': 'https://ba.hse.ru/news/admission/'
 }
